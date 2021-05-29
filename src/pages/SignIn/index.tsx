@@ -1,12 +1,11 @@
-import { useContext } from 'react';
-import { AuthContext } from '../../contexts/auth';
+import { useAuth } from '../../contexts/auth';
 
 import logo from '../../assets/logo.png';
 
 import { Container, Logo, Input, Button } from './styles'
 
 function SignIn() {
-    const { signIn, loading } = useContext(AuthContext)
+    const { signIn, loading } = useAuth()
 
     function handleSignIn() {
         signIn()

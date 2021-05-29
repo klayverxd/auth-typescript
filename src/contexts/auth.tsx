@@ -1,7 +1,7 @@
-import { createContext, useEffect, useState } from "react"
-import { useHistory } from "react-router";
+import { createContext, useContext, useEffect, useState } from "react"
 
 import api from '../services/api';
+import history from "../services/history";
 interface Props {
     children?: React.ReactNode
 }
@@ -19,7 +19,7 @@ const initialState = {
     signed: false,
     setSigned: () => { },
     signIn: () => { },
-    loading: false,
+    loading: true,
     token: null,
     user: {
         name: ''
@@ -33,8 +33,6 @@ function AuthProvider({ children }: Props) {
     const [loading, setLoading] = useState(initialState.loading)
     const [signed, setSigned] = useState(initialState.signed)
 
-    const history = useHistory()
-
     useEffect(() => {
         const storedToken = localStorage.getItem('@Auth:TOKEN')
         const storedUser = localStorage.getItem('@Auth:USER')
@@ -45,6 +43,8 @@ function AuthProvider({ children }: Props) {
 
             api.defaults.headers.authorization = `Bearer ${storedToken}`
         }
+
+        setLoading(false)
     }, [])
 
     async function signIn() {
@@ -79,4 +79,10 @@ function AuthProvider({ children }: Props) {
     )
 }
 
-export { AuthContext, AuthProvider }
+function useAuth() {
+    const context = useContext(AuthContext)
+
+    return context
+}
+
+export { useAuth }
